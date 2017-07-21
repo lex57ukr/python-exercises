@@ -36,6 +36,21 @@
                     "message": 4
                 }
             }
+        },
+        {
+            "taskName": "Submit Exercise",
+            "type": "shell",
+            "command": "exercism",
+            "args": [
+                "s",
+                "${file}"
+            ]
+        },
+        {
+            "taskName": "Fetch New Exercise",
+            "type": "shell",
+            "command": "exercism",
+            "args": [ "f" ]
         }
     ]
 }
