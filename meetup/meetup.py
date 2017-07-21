@@ -1,5 +1,6 @@
 import calendar
 from datetime import date
+from functools import partial
 
 
 def meetup_day(year, month, day_name, order):
@@ -16,19 +17,20 @@ def meetup_day(year, month, day_name, order):
         }[day_name]
         return [week[day] for week in month_cal if week[day] != 0]
 
-    def _ordinal(days):
-        i = {
-            '1st': 0, '2nd': 1, '3rd': 2,
-            '4th': 3, '5th': 4, 'last': -1
-        }[order]
+    def _ordinal(i, days):
         return days[i]
 
     def _teenth(days):
         return next(x for x in days if 12 < x < 20)
 
-    if order == 'teenth':
-        day = _teenth
-    else:
-        day = _ordinal
+    day = {
+        '1st':    partial(_ordinal, 0),
+        '2nd':    partial(_ordinal, 1),
+        '3rd':    partial(_ordinal, 2),
+        '4th':    partial(_ordinal, 3),
+        '5th':    partial(_ordinal, 4),
+        'last':   partial(_ordinal, -1),
+        'teenth': _teenth
+    }[order](_week_days_in_month())
 
-    return date(year, month, day(_week_days_in_month()))
+    return date(year, month, day)
