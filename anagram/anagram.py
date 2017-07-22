@@ -1,14 +1,15 @@
-def detect_anagrams(base, candidates):
+def detect_anagrams(word, candidates):
+    accept = anagram_detector_for(word)
+    return [w for w in candidates if accept(w)]
+
+def anagram_detector_for(word):
     def _alpa(word):
-        a = list(word)
-        a.sort()
-        return a
+        return sorted(word.lower())
 
-    lower_base = base.lower()
-    alpha_base = _alpa(lower_base)
+    lower = word.lower()
+    alpha = _alpa(word)
 
-    def _is_anagram(word):
-        lower = word.lower()
-        return lower != lower_base and _alpa(lower) == alpha_base
+    def _is_my_anagram(other):
+        return other.lower() != lower and _alpa(other) == alpha
 
-    return [word for word in candidates if _is_anagram(word)]
+    return _is_my_anagram
