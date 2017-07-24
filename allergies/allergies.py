@@ -16,10 +16,16 @@ class Allergies(object):
     ]
 
     def __init__(self, total_score):
-        self.lst = [
+        self._lst = [
             name for score, name in self.ALLERGENS
             if (score & total_score) == score
         ]
 
-    def is_allergic_to(self, allergen):
-        return allergen in self.lst
+    def __bool__(self):
+        return bool(self._lst)
+
+    def __len__(self):
+        return len(self._lst)
+
+    def __getitem__(self, postion):
+        return self._lst[postion]
