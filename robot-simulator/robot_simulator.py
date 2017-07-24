@@ -2,11 +2,12 @@ from collections import namedtuple, deque
 
 Point = namedtuple('Point', ['x', 'y'])
 
-#Bearings also dub as point deltas for orientation
+# Bearings also dub as point deltas for orientation
 NORTH = Point(x=0, y=1)
 EAST = Point(x=1, y=0)
 SOUTH = Point(x=0, y=-1)
 WEST = Point(x=-1, y=0)
+
 
 class Robot(object):
     __bearings = deque([NORTH, EAST, SOUTH, WEST])
