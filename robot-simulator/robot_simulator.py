@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import namedtuple, deque
 
 Point = namedtuple('Point', ['x', 'y'])
 
@@ -9,25 +9,39 @@ SOUTH = Point(x=0, y=-1)
 WEST = Point(x=-1, y=0)
 
 class Robot(object):
-    _ctl_bearings = [NORTH, EAST, SOUTH, WEST]
+    __bearings = deque([NORTH, EAST, SOUTH, WEST])
 
     def __init__(self, bearing=NORTH, x=0, y=0):
         self.bearing = bearing
-        self.coordinates = Point(x, y)
-
-        self._sim_instructions_handler = {
+        self.__coordinates = Point(x, y)
+        self.__sim_instr_handlers = {
             'L': self.turn_left,
             'R': self.turn_right,
             'A': self.advance,
         }
 
+    @property
+    def coordinates(self):
+        return self.__coordinates
+
+    @coordinates.setter
+    def coordinates(self, value):
+        self.__coordinates = value
+
+    @property
+    def bearing(self):
+        return self.__bearings[0]
+
+    @bearing.setter
+    def bearing(self, value):
+        while value != self.bearing:
+            self.turn_right()
+
     def turn_right(self):
-        i = self._ctl_bearings.index(self.bearing) - len(self._ctl_bearings)
-        self.bearing = self._ctl_bearings[i + 1]
+        self.__bearings.rotate(-1)
 
     def turn_left(self):
-        i = self._ctl_bearings.index(self.bearing)
-        self.bearing = self._ctl_bearings[i - 1]
+        self.__bearings.rotate(1)
 
     def advance(self):
         dx, dy = self.bearing
@@ -36,4 +50,4 @@ class Robot(object):
 
     def simulate(self, instructions):
         for instr in instructions:
-            self._sim_instructions_handler[instr]()
+            self.__sim_instr_handlers[instr]()
