@@ -7,10 +7,8 @@ def sieve(limit):
                 candidates[i] = False
 
         for i in range(2, limit + 1):
-            if not candidates[i]:
-                continue
-
-            _mark_multiples_of(i)
-            yield i
+            if candidates[i]:
+                _mark_multiples_of(i)
+                yield i
 
     return list(_prime_numbers())
