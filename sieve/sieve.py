@@ -1,7 +1,4 @@
 def sieve(limit):
-    if limit < 2:
-        return []
-
     def _prime_numbers():
         candidates = [True] * (limit + 1)
 
