@@ -1,9 +1,9 @@
 from functools import partial
-from itertools import zip_longest
+from textwrap import wrap
 
 
 def encode(text):
-    @group_output_text(group_size=5)
+    @cipher_formatter
     def _encoded_text():
         tmap = {c: e for c, e in _transcoded_mappings()}
         return (tmap.setdefault(c.lower(), c) for c in text if c.isalnum())
@@ -26,21 +26,12 @@ def _transcoded_mappings():
         yield (chr(c), chr(end + start - c))
 
 
-def group_output_text(function=None, group_size=5, fill_value=''):
-    """Group output text by specified group size"""
+def cipher_formatter(function=None, group_size=5):
     if function is None:
-        return partial(
-            group_output_text,
-            group_size=group_size,
-            fill_value=fill_value
-        )
+        return partial(cipher_formatter, group_size=group_size)
 
     def _wrapped(*args, **kwargs):
-        iterator = function(*args, **kwargs)
-
-        sequence = [iter(iterator)] * group_size
-        groups = zip_longest(*sequence, fillvalue=fill_value)
-
-        return (''.join(list(g)) for g in groups)
+        text = ''.join(function(*args, **kwargs))
+        return wrap(text, width=group_size)
 
     return _wrapped
