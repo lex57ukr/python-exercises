@@ -25,6 +25,7 @@ def _transcoded_mappings():
     for c in range(start, end + 1):
         yield (chr(c), chr(end + start - c))
 
+
 def group_output_text(function=None, group_size=5, fill_value=''):
     """Group output text by specified group size"""
     if function is None:
