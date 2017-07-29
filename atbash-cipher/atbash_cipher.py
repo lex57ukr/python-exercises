@@ -41,6 +41,6 @@ def group_output_text(function=None, group_size=5, fill_value=''):
         sequence = [iter(iterator)] * group_size
         groups = zip_longest(*sequence, fillvalue=fill_value)
 
-        return [''.join(list(g)) for g in groups]
+        return (''.join(list(g)) for g in groups)
 
     return _wrapped
