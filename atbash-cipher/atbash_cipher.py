@@ -1,9 +1,9 @@
-from functools import partial
-from textwrap import wrap
+import textwrap
+import functools
 
 
 def encode(text):
-    @cipher_formatter
+    @wrap_output(width=5)
     def _encoded_text():
         tmap = {c: e for c, e in _transcoded_mappings()}
         return (tmap.setdefault(c.lower(), c) for c in text if c.isalnum())
@@ -26,12 +26,13 @@ def _transcoded_mappings():
         yield (chr(c), chr(end + start - c))
 
 
-def cipher_formatter(function=None, group_size=5):
+def wrap_output(function=None, width=70):
+    """Decorate a function to wrap its output by width-sized groups"""
     if function is None:
-        return partial(cipher_formatter, group_size=group_size)
+        return functools.partial(wrap_output, width=width)
 
     def _wrapped(*args, **kwargs):
         text = ''.join(function(*args, **kwargs))
-        return wrap(text, width=group_size)
+        return textwrap.wrap(text, width=width)
 
     return _wrapped
