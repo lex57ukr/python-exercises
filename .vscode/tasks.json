@@ -13,6 +13,7 @@
             "command": "py.test",
             "args": [
                 "-x",
+                "-v",
                 "--ff",
                 "${fileDirname}"
             ]
