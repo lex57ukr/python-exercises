@@ -14,11 +14,16 @@ def say(number):
     if number == 0:
         return _digit(0)
 
-    return ' '.join([
+    words = [
         _say_thousands(group, power)
         for power, group in group_thousands(number)
         if sum(group) != 0
-    ])
+    ]
+
+    if len(words) > 1 and 'and' not in words[-1]:
+        words.insert(1, 'and')
+
+    return ' '.join(words)
 
 
 def group_thousands(number):
